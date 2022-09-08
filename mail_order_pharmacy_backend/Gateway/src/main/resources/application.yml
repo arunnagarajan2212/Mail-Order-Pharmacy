@@ -1,0 +1,42 @@
+server:
+  port: 8083
+spring:
+  application:
+    name: GATEWAY  
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+              allowedOrigins: "*"
+              allowedMethods: "*"
+              allowedHeaders: "*"
+    
+      routes:
+      -  id: authapp
+         uri:
+          lb://AUTHAPP
+         predicates:
+          - Path=/authapp/** 
+          
+      -  id: drugdetailapp
+         uri:
+          lb://DRUGDETAILAPP
+         predicates:
+          - Path=/drugdetailapp/** 
+
+      -  id: Refillapp 
+         uri:
+          lb://REFILLAPP
+         predicates:
+          - Path=/refillappdb/**   
+
+      -  id: subscription-service
+         uri:
+          lb://SUBSCRIPTION-SERVICE
+         predicates:
+          - Path=/subscriptionapi/**             
+
+                              
